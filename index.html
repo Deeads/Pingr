@@ -71,7 +71,7 @@
 
   /* signup form */
   .form{display:flex;flex-direction:column;gap:12px;margin-top:4px}
-  .form input[type=tel]{font-family:var(--body);font-weight:700;font-size:16px;border:var(--b);
+  .form input[type=email]{font-family:var(--body);font-weight:700;font-size:16px;border:var(--b);
     border-radius:14px;padding:13px 15px;box-shadow:var(--sh-sm);background:#fff}
   .consent{display:flex;gap:10px;align-items:flex-start;font-size:13px;font-weight:600;color:#3a3547;line-height:1.4}
   .consent input{width:22px;height:22px;flex:none;accent-color:var(--blue);margin-top:1px}
@@ -196,11 +196,10 @@
   <div class="block">
     <h2>Get started</h2>
     <div class="form">
-      <input type="tel" id="phone" placeholder="Your mobile number" autocomplete="tel">
+      <input type="email" id="email" placeholder="Your email address" autocomplete="email">
       <label class="consent"><input type="checkbox" id="consent">
-        <span>I agree to receive recurring automated text messages from Pingr at the number provided.
-        Consent is not a condition of any purchase. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help.</span></label>
-      <button class="cta" onclick="signup()">Text me to start →</button>
+        <span>I agree to receive product updates and early access info from Pingr. No spam — unsubscribe any time.</span></label>
+      <button class="cta" onclick="signup()">Notify me when it's ready →</button>
     </div>
   </div>
 
@@ -285,11 +284,11 @@ document.querySelector("nav").addEventListener("click",e=>{
   window.scrollTo(0,0);
 });
 function signup(){
-  const phone=document.getElementById("phone").value.trim();
+  const email=document.getElementById("email").value.trim();
   const ok=document.getElementById("consent").checked;
-  if(!phone){showUpsell("Enter your number first.");return;}
-  if(!ok){showUpsell("Check the consent box to continue.");return;}
-  showUpsell("Demo only — Pingr would text you to confirm. ✅");
+  if(!email){showUpsell("Enter your email first.");return;}
+  if(!ok){showUpsell("Check the box to continue.");return;}
+  showUpsell("You're on the list. We'll be in touch. ✅");
 }
 
 // ── prototype logic ──
