@@ -70,11 +70,25 @@
   .form{display:flex;flex-direction:column;gap:12px;margin-top:4px}
   .form input[type=email]{font-family:var(--body);font-weight:700;font-size:16px;border:var(--b);
     border-radius:14px;padding:13px 15px;box-shadow:var(--sh-sm);background:#fff}
+  .form input[type=tel]{font-family:var(--body);font-weight:700;font-size:16px;border:var(--b);
+    border-radius:14px;padding:13px 15px;box-shadow:var(--sh-sm);background:#fff}
+  .form input[type=text].otp{letter-spacing:6px;text-align:center;font-size:20px}
+  .fieldnote{font-size:11.5px;font-weight:600;color:#6a6577;margin-top:-6px}
+  .err{font-size:12.5px;font-weight:700;color:#B3261E;display:none}
+  .err.show{display:block}
+  .success{background:var(--mint);border:var(--b);border-radius:14px;box-shadow:var(--sh-sm);
+    padding:13px 15px;font-family:var(--disp);font-weight:800;font-size:14.5px;display:none}
+  .success.show{display:block}
+  .fstep{display:none} .fstep.show{display:flex;flex-direction:column;gap:12px}
+  .linkbtn{background:none;border:none;font:inherit;font-weight:700;font-size:12.5px;
+    color:var(--blue2);text-decoration:underline;cursor:pointer;padding:0;text-align:left}
   .consent{display:flex;gap:10px;align-items:flex-start;font-size:13px;font-weight:600;color:#3a3547;line-height:1.4}
   .consent input{width:22px;height:22px;flex:none;accent-color:var(--blue);margin-top:1px}
   .cta{font-family:var(--disp);font-weight:800;font-size:17px;color:#fff;background:var(--blue);
     border:var(--b);border-radius:15px;box-shadow:var(--sh);padding:14px;cursor:pointer;transition:.08s}
   .cta:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+  .cta[disabled]{opacity:.55;cursor:default}
+  .cta:active[disabled]{transform:none;box-shadow:var(--sh)}
 
   .terms{font-size:13px;font-weight:600;color:#4a4556;line-height:1.6}
   .terms li{margin-bottom:7px}
@@ -191,23 +205,59 @@
   <div class="block">
     <h2>How it works</h2>
     <div class="steps">
-      <div class="step"><div><b>Leave your email.</b> <span>We'll email you when Pingr is ready for your number.</span></div></div>
-      <div class="step"><div><b>Pingr says hi.</b> <span>Once you're in, you get one confirmation text to start things off.</span></div></div>
+      <div class="step"><div><b>Enter your number.</b> <span>Check the consent box and we'll text you a 6-digit code to confirm it's really you.</span></div></div>
+      <div class="step"><div><b>Confirm the code.</b> <span>You're opted in — reply STOP any time to cancel.</span></div></div>
       <div class="step"><div><b>Just talk to it.</b> <span>Text what you ate or need to do. That's the whole app.</span></div></div>
     </div>
   </div>
 
   <div class="block">
     <h2>Get started</h2>
+
+    <!-- STEP 1: phone + explicit SMS consent. This calls the live Pingr backend
+         (the same /auth/request-code endpoint the app uses) so this page IS a
+         real, working SMS opt-in mechanism, not a mockup of one. -->
+    <div class="fstep show" id="fstep-phone">
+      <input type="tel" id="phone" placeholder="Your mobile number" autocomplete="tel" inputmode="tel">
+      <label class="consent"><input type="checkbox" id="smsconsent">
+        <span>You agree to receive recurring automated text messages from Pingr
+        (reminders and check-ins) at the number above. Consent is not a condition
+        of purchase. Message frequency varies. Message and data rates may apply.
+        Reply <b>STOP</b> to cancel, <b>HELP</b> for help. See our
+        <a href="./privacy.html">Privacy Policy</a> and <a href="./terms.html">Terms</a>.</span></label>
+      <div class="err" id="phone-err"></div>
+      <button class="cta" id="sendcode-btn" onclick="sendCode()">Text me a code →</button>
+      <div class="fieldnote">We'll text a 6-digit code to confirm it's really your number.</div>
+    </div>
+
+    <!-- STEP 2: verify the code they were just texted -->
+    <div class="fstep" id="fstep-otp">
+      <div class="fieldnote" id="otp-sentto"></div>
+      <input type="text" class="otp" id="otpcode" placeholder="000000" inputmode="numeric" maxlength="6">
+      <div class="err" id="otp-err"></div>
+      <button class="cta" id="verify-btn" onclick="verifyCode()">Confirm →</button>
+      <button class="linkbtn" onclick="backToPhone()">Wrong number? Go back</button>
+    </div>
+
+    <!-- STEP 3: confirmed -->
+    <div class="success" id="fstep-success">
+      You're opted in. ✅ Standard message and data rates may apply — reply STOP
+      any time to opt out, HELP for help.
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Prefer email updates instead?</h2>
     <div class="form">
       <input type="email" id="email" placeholder="Your email address" autocomplete="email">
       <label class="consent"><input type="checkbox" id="consent">
-        <span>Email me when Pingr is ready for my phone number. This is an email notice only —
+        <span>Email me when Pingr is ready. This is an email notice only —
         it is not consent to receive text messages, and Pingr does not send marketing or
         promotional texts.</span></label>
-      <button class="cta" onclick="signup()">Notify me when it's ready →</button>
+      <button class="cta" onclick="signup()">Notify me →</button>
     </div>
   </div>
+
 
   <div class="block">
     <h2>SMS terms &amp; privacy</h2>
@@ -335,6 +385,82 @@ function signup(){
   if(!ok){showUpsell("Check the box to continue.");return;}
   showUpsell("You're on the list. We'll be in touch. ✅");
 }
+
+// ── live phone opt-in — calls the real Pingr backend so this page IS the
+// opt-in mechanism a carrier reviewer can test, not a description of one. ──
+// APP_KEY here matches pingr-app/api.js — it identifies "this is a Pingr
+// client" (already ships inside the app bundle), not a user secret; the real
+// abuse guard is server-side per-phone/per-IP throttling on /auth/request-code.
+const API_BASE = "https://kit-holy-valley-1320.fly.dev";
+const APP_KEY  = "foiefjoejfownfowifowijfwoijefe";
+let pendingPhone = null;
+
+document.getElementById("phone").addEventListener("input", e=>{
+  const d = e.target.value.replace(/\D/g,"").slice(0,10);
+  let out = d;
+  if (d.length > 6) out = `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}`;
+  else if (d.length > 3) out = `(${d.slice(0,3)}) ${d.slice(3)}`;
+  e.target.value = out;
+});
+document.getElementById("otpcode").addEventListener("input", e=>{
+  e.target.value = e.target.value.replace(/\D/g,"").slice(0,6);
+});
+
+async function apiPost(path, body){
+  const r = await fetch(API_BASE+path, {
+    method:"POST",
+    headers:{ "Content-Type":"application/x-www-form-urlencoded", "X-App-Key": APP_KEY },
+    body: new URLSearchParams(body),
+  });
+  let data = {};
+  try { data = await r.json(); } catch {}
+  if (!r.ok) throw new Error(data.detail || `Request failed (${r.status})`);
+  return data;
+}
+function setErr(id,msg){ const e=document.getElementById(id); e.textContent=msg||""; e.classList.toggle("show",!!msg); }
+function setBusy(btnId,busy,label){ const b=document.getElementById(btnId); b.disabled=busy; if(label) b.textContent=busy?label:b.dataset.label||b.textContent; }
+
+async function sendCode(){
+  setErr("phone-err","");
+  const digits = document.getElementById("phone").value.replace(/\D/g,"");
+  if (digits.length !== 10){ setErr("phone-err","Enter a full 10-digit US mobile number."); return; }
+  if (!document.getElementById("smsconsent").checked){ setErr("phone-err","Check the box to agree to receive texts."); return; }
+  const phone = "+1"+digits;
+  setBusy("sendcode-btn", true, "Sending…");
+  try {
+    await apiPost("/auth/request-code", { phone });
+    pendingPhone = phone;
+    document.getElementById("otp-sentto").textContent = `Code sent to ${document.getElementById("phone").value}.`;
+    document.getElementById("fstep-phone").classList.remove("show");
+    document.getElementById("fstep-otp").classList.add("show");
+    document.getElementById("otpcode").focus();
+  } catch (e) {
+    setErr("phone-err", e.message.includes("Too many") ? e.message : "Couldn't send a code — check the number and try again.");
+  } finally {
+    setBusy("sendcode-btn", false);
+  }
+}
+async function verifyCode(){
+  setErr("otp-err","");
+  const code = document.getElementById("otpcode").value;
+  if (code.length !== 6){ setErr("otp-err","Enter the 6-digit code."); return; }
+  setBusy("verify-btn", true, "Checking…");
+  try {
+    await apiPost("/auth/verify", { phone: pendingPhone, code });
+    document.getElementById("fstep-otp").classList.remove("show");
+    document.getElementById("fstep-success").classList.add("show");
+  } catch (e) {
+    setErr("otp-err", "That code didn't match — check it and try again.");
+  } finally {
+    setBusy("verify-btn", false);
+  }
+}
+function backToPhone(){
+  setErr("otp-err","");
+  document.getElementById("fstep-otp").classList.remove("show");
+  document.getElementById("fstep-phone").classList.add("show");
+}
+
 
 // ── prototype logic ──
 // Mirrors the real backend's TEXT_SLOTS (text messages/day budget per tier) and
