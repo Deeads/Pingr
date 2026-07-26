@@ -396,7 +396,12 @@ const APP_KEY  = "foiefjoejfownfowifowijfwoijefe";
 let pendingPhone = null;
 
 document.getElementById("phone").addEventListener("input", e=>{
-  const d = e.target.value.replace(/\D/g,"").slice(0,10);
+  let d = e.target.value.replace(/\D/g,"");
+  // people often type/autofill a leading "1" (US country code) out of habit —
+  // strip it before taking the 10 significant digits, or "1-704-..." becomes
+  // area code "170" instead of "704".
+  if (d.length === 11 && d[0] === "1") d = d.slice(1);
+  d = d.slice(0,10);
   let out = d;
   if (d.length > 6) out = `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}`;
   else if (d.length > 3) out = `(${d.slice(0,3)}) ${d.slice(3)}`;
