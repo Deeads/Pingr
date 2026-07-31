@@ -263,13 +263,13 @@
     <h2>SMS terms &amp; privacy</h2>
     <ul class="terms">
       <li><b>Program:</b> Pingr sends personal-assistant text messages — reminders, check-ins, and replies to messages you send.</li>
-      <li><b>How to opt in:</b> Inside the Pingr app, you type your own mobile number into a form
-        field and tap a button confirming you want text reminders. The button sits directly below
-        this disclosure: <i>"You agree to receive recurring automated text reminders from Pingr.
-        Message frequency varies. Message and data rates may apply. Reply STOP to cancel, HELP for
-        help."</i> Your number is then verified with a one-time passcode, so only the owner of the
-        number can opt in. Pingr never obtains phone numbers from purchased lists, partners, or any
-        other third-party source.</li>
+      <li><b>How to opt in:</b> Directly on this page, or inside the Pingr app, you type your own
+        mobile number into a form field and tap a button confirming you want text reminders. The
+        button sits directly below this disclosure: <i>"You agree to receive recurring automated
+        text reminders from Pingr. Message frequency varies. Message and data rates may apply.
+        Reply STOP to cancel, HELP for help."</i> Your number is then verified with a one-time
+        passcode, so only the owner of the number can opt in. Pingr never obtains phone numbers
+        from purchased lists, partners, or any other third-party source.</li>
       <li><b>No marketing:</b> Pingr sends only messages you asked for, about your own reminders and
         tracking. We send no marketing, promotional, or affiliate texts, we never send messages on
         behalf of another business, and we never sell, rent, or share your phone number or your SMS
@@ -284,9 +284,9 @@
     <table class="tiertable">
       <tr><th>Plan</th><th>Delivery</th><th>Two-way texting</th></tr>
       <tr><td>Free</td><td>App push only</td><td>Not included</td></tr>
-      <tr><td>Base</td><td>Push + a few texts/day</td><td>Included</td></tr>
-      <tr><td>Pro</td><td>Push + more texts/day</td><td>Included, custom goals</td></tr>
-      <tr><td>Advanced</td><td>Push + most texts/day</td><td>Included, fastest check-ins</td></tr>
+      <tr><td>Base</td><td>Push + 3 texts/day</td><td>Included</td></tr>
+      <tr><td>Pro</td><td>Push + 5 texts/day</td><td>Included, custom goals</td></tr>
+      <tr><td>Advanced</td><td>Push + 8 texts/day</td><td>Included, fastest check-ins</td></tr>
     </table>
   </div>
  </div>
@@ -472,7 +472,7 @@ function backToPhone(){
 // TIER_CEILING (fastest allowed cadence, expressed here as hour-slot spacing).
 // This is a static mock — no server behind it — but the NUMBERS match main.py
 // so this page doesn't misrepresent what the product actually does.
-const TEXT_SLOTS={free:0,base:3,pro:4,advanced:6};
+const TEXT_SLOTS={free:0,base:3,pro:5,advanced:8};
 // AM = 12am..11am, PM = 12pm..11pm, Full = all 24 (3 rows of 8, same layout as the app)
 function hoursForView(v){
   if(v==="am")   return [0,1,2,3,4,5,6,7,8,9,10,11];
