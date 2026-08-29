@@ -219,14 +219,14 @@
          real, working SMS opt-in mechanism, not a mockup of one. -->
     <div class="fstep show" id="fstep-phone">
       <input type="tel" id="phone" placeholder="Your mobile number" autocomplete="tel" inputmode="tel">
-      <label class="consent"><input type="checkbox" id="smsconsent">
+      <label class="consent"><input type="checkbox" id="smsconsent" onchange="syncConsent()">
         <span>You agree to receive recurring automated text messages from Pingr
         (reminders and check-ins) at the number above. Consent is not a condition
         of purchase. Message frequency varies. Message and data rates may apply.
         Reply <b>STOP</b> to cancel, <b>HELP</b> for help. See our
         <a href="./privacy.html">Privacy Policy</a> and <a href="./terms.html">Terms</a>.</span></label>
       <div class="err" id="phone-err"></div>
-      <button class="cta" id="sendcode-btn" onclick="sendCode()">Text me a code →</button>
+      <button class="cta" id="sendcode-btn" onclick="sendCode()" disabled>Yes, text me reminders →</button>
       <div class="fieldnote">We'll text a 6-digit code to confirm it's really your number.</div>
     </div>
 
@@ -264,12 +264,14 @@
     <ul class="terms">
       <li><b>Program:</b> Pingr sends personal-assistant text messages — reminders, check-ins, and replies to messages you send.</li>
       <li><b>How to opt in:</b> Directly on this page, or inside the Pingr app, you type your own
-        mobile number into a form field and tap a button confirming you want text reminders. The
-        button sits directly below this disclosure: <i>"You agree to receive recurring automated
-        text reminders from Pingr. Message frequency varies. Message and data rates may apply.
-        Reply STOP to cancel, HELP for help."</i> Your number is then verified with a one-time
-        passcode, so only the owner of the number can opt in. Pingr never obtains phone numbers
-        from purchased lists, partners, or any other third-party source.</li>
+        mobile number into a form field and check a consent box confirming you want text reminders.
+        The box is never pre-checked, and the form cannot be submitted until you check it. The box
+        sits directly above the submit button and carries this disclosure: <i>"You agree to receive
+        recurring automated text messages from Pingr (reminders and check-ins) at the number above.
+        Consent is not a condition of purchase. Message frequency varies. Message and data rates
+        may apply. Reply STOP to cancel, HELP for help."</i> Your number is then verified with a
+        one-time passcode, so only the owner of the number can opt in. Pingr never obtains phone
+        numbers from purchased lists, partners, or any other third-party source.</li>
       <li><b>No marketing:</b> Pingr sends only messages you asked for, about your own reminders and
         tracking. We send no marketing, promotional, or affiliate texts, we never send messages on
         behalf of another business, and we never sell, rent, or share your phone number or your SMS
@@ -425,6 +427,14 @@ async function apiPost(path, body){
 function setErr(id,msg){ const e=document.getElementById(id); e.textContent=msg||""; e.classList.toggle("show",!!msg); }
 function setBusy(btnId,busy,label){ const b=document.getElementById(btnId); b.disabled=busy; if(label) b.textContent=busy?label:b.dataset.label||b.textContent; }
 
+// The submit button starts disabled and only enables once the consent box is
+// checked — same gate the app uses (App.js: disabled={... || !smsConsent}).
+// Carrier vetting asks that consent be actively given, never pre-selected.
+function syncConsent(){
+  const ok = document.getElementById("smsconsent").checked;
+  document.getElementById("sendcode-btn").disabled = !ok;
+}
+
 async function sendCode(){
   setErr("phone-err","");
   const digits = document.getElementById("phone").value.replace(/\D/g,"");
@@ -443,6 +453,7 @@ async function sendCode(){
     setErr("phone-err", e.message.includes("Too many") ? e.message : "Couldn't send a code — check the number and try again.");
   } finally {
     setBusy("sendcode-btn", false);
+    syncConsent();   // setBusy re-enables unconditionally; the consent gate wins
   }
 }
 async function verifyCode(){
@@ -464,6 +475,7 @@ function backToPhone(){
   setErr("otp-err","");
   document.getElementById("fstep-otp").classList.remove("show");
   document.getElementById("fstep-phone").classList.add("show");
+  syncConsent();   // coming back re-applies the consent gate, never leaves it open
 }
 
 
