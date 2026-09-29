@@ -34,6 +34,9 @@
   .navtab.on{background:var(--yellow)}
   .navtab:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
 
+  .vid{background:var(--ink);border:var(--b);border-radius:26px;box-shadow:9px 9px 0 var(--ink);padding:14px;margin-bottom:18px;text-align:center}
+  .vid video{display:block;width:100%;max-width:340px;margin:0 auto;border-radius:16px;aspect-ratio:9/16;background:#000}
+  .vid .hd{display:inline-block;margin-top:12px;font-weight:800;font-size:13px;color:var(--ink);background:var(--yellow);border:2.5px solid var(--paper);border-radius:12px;padding:7px 14px;text-decoration:none}
   .page{display:none} .page.on{display:block}
 
   .wrap{max-width:660px;margin:0 auto}
@@ -192,6 +195,10 @@
        you're working toward. No app to open, no feed to scroll.</p>
   </div>
 
+  <div class="vid">
+    <video src="./videos/pingr-promo-1080p.mp4" poster="./videos/pingr-poster.jpg" autoplay muted loop playsinline controls preload="metadata"></video>
+    <a class="hd" href="./videos/pingr-promo-4k.mp4" target="_blank" rel="noopener">Watch in 4K ↗</a>
+  </div>
   <div class="row">
     <div class="feat"><div class="ic a">🍔</div><h3>Calorie tracking</h3>
       <p>Text "had a burger and a coke" — Pingr does the math and keeps your daily total.</p></div>
@@ -364,6 +371,7 @@
   &copy; 2026 Pingr &middot; Attis Labs LLC (owner: David L Davis Jr) &middot; Charlotte, NC<br>
   <a href="./privacy.html" style="color:#fff;text-decoration:underline">Privacy Policy</a> &middot;
   <a href="./terms.html" style="color:#fff;text-decoration:underline">Terms &amp; SMS Program Terms</a> &middot;
+  <a href="./spine.html" style="color:#fff;text-decoration:underline">Spine</a> &middot;
   <a href="mailto:daviddvs.inc@gmail.com" style="color:#fff;text-decoration:underline">daviddvs.inc@gmail.com</a><br>
   Message frequency varies. Message and data rates may apply. Reply STOP to cancel, HELP for help.
   Pingr sends no marketing texts and never shares your number or consent with third parties.

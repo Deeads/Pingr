@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spine: Chats end. Notes stay.</title>
+<meta name="description" content="Spine is an AI that lives on your desktop, inside your notes. Plain markdown files you own.">
+<meta property="og:title" content="Spine: Chats end. Notes stay.">
+<meta property="og:image" content="./videos/spine-poster.jpg">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&family=Inter:wght@400;500;600&display=swap');
+:root{--bg:#ECE6FA;--ink:#2A2140;--sub:#5E5578;--card:#F8F5FF;--cop:#E0884A;
+  --clay:26px 34px 64px rgba(88,66,160,.22),inset -12px -14px 24px rgba(88,66,160,.12),inset 12px 14px 22px rgba(255,255,255,.95);
+  --clay-sm:10px 14px 26px rgba(88,66,160,.22),inset -6px -8px 12px rgba(88,66,160,.14),inset 6px 8px 12px #fff}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg);min-height:100vh;
+  background-image:radial-gradient(700px 600px at 10% 0%,#FFD6C0 0%,transparent 60%),radial-gradient(800px 700px at 95% 10%,#D2C4FF 0%,transparent 60%),radial-gradient(900px 700px at 50% 100%,#CBF0E2 0%,transparent 60%);
+  background-attachment:fixed;padding:28px 16px 60px}
+.wrap{max-width:1040px;margin:0 auto}
+nav{display:flex;align-items:center;gap:12px;margin-bottom:34px}
+.logo{font-family:Nunito;font-weight:900;font-size:30px;letter-spacing:-.5px;background:var(--card);border-radius:22px;padding:8px 22px;box-shadow:var(--clay-sm)}
+.logo span{color:var(--cop)}
+nav a.back{margin-left:auto;font-weight:600;font-size:14px;color:var(--sub);text-decoration:none;background:var(--card);border-radius:16px;padding:10px 16px;box-shadow:var(--clay-sm)}
+.hero{text-align:center;margin:10px 0 34px}
+h1{font-family:Nunito;font-weight:900;font-size:clamp(44px,8vw,86px);line-height:1;letter-spacing:-2px;margin:0}
+h1 em{font-style:normal;color:var(--cop)}
+.hero p{font-size:clamp(17px,2.4vw,21px);color:var(--sub);max-width:620px;margin:20px auto 0;line-height:1.5;font-weight:500}
+.vid{background:var(--card);border-radius:40px;padding:18px;box-shadow:var(--clay)}
+.vid video{display:block;width:100%;border-radius:26px;aspect-ratio:16/9;background:#1d1d20}
+.hd{display:flex;justify-content:center;margin-top:16px}
+.hd a{font-weight:600;font-size:14px;color:var(--sub);text-decoration:none;background:#EFE9FF;border-radius:14px;padding:9px 16px;box-shadow:var(--clay-sm)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px;margin:40px 0}
+.f{background:var(--card);border-radius:32px;padding:26px 24px;box-shadow:var(--clay)}
+.f h3{font-family:Nunito;font-weight:900;font-size:24px;margin:14px 0 8px}
+.f p{margin:0;color:var(--sub);line-height:1.5;font-size:15.5px}
+.n{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;background:var(--cop);color:#fff;font-family:Nunito;font-weight:900;box-shadow:inset 3px 4px 6px rgba(255,255,255,.45),inset -3px -4px 6px rgba(120,50,10,.3),6px 8px 14px rgba(160,80,20,.25)}
+.cta{text-align:center;margin-top:10px}
+.cta a{display:inline-block;font-family:Nunito;font-weight:900;font-size:22px;color:#fff;background:var(--cop);text-decoration:none;border-radius:30px;padding:18px 34px;box-shadow:16px 20px 40px rgba(160,80,20,.3),inset -8px -10px 16px rgba(120,50,10,.28),inset 8px 10px 16px rgba(255,255,255,.4);transition:transform .15s}
+.cta a:hover{transform:translateY(-2px)}
+.cta small{display:block;margin-top:14px;color:var(--sub);font-size:14px}
+footer{text-align:center;color:var(--sub);font-size:13px;margin-top:50px}
+footer a{color:var(--sub)}
+@media (prefers-reduced-motion:reduce){.cta a{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav><span class="logo">Spine<span>.</span></span><a class="back" href="./index.html">← Pingr</a></nav>
+
+  <section class="hero">
+    <h1>Chats end. <em>Notes stay.</em></h1>
+    <p>Spine is an AI that lives on your desktop, not in a chat window. Answers land in your notes, and your notes float beside your work.</p>
+  </section>
+
+  <div class="vid">
+    <video src="./videos/spine-promo-1080p.mp4" poster="./videos/spine-poster.jpg" autoplay muted loop playsinline controls preload="metadata"></video>
+  </div>
+  <div class="hd"><a href="./videos/spine-promo-4k.mp4" target="_blank" rel="noopener">Watch in 4K ↗</a></div>
+
+  <div class="grid">
+    <div class="f"><span class="n">1</span><h3>Lives on your desktop</h3><p>One hotkey and the chat bar slides in over whatever's open.</p></div>
+    <div class="f"><span class="n">2</span><h3>Answers become notes</h3><p>Ask, and it goes into your notes, not a thread you'll never scroll back to.</p></div>
+    <div class="f"><span class="n">3</span><h3>Notes that float</h3><p>Close the app and your notes stay on screen, beside the slides or the code.</p></div>
+    <div class="f"><span class="n">4</span><h3>Files you own</h3><p>Every note is a plain markdown file on your computer. No lock-in.</p></div>
+  </div>
+
+  <div class="cta"><a href="https://attislabs.com">Get early access</a><small>The desktop is the interface.</small></div>
+
+  <footer>&copy; 2026 Attis Labs LLC &middot; Charlotte, NC &middot; <a href="./privacy.html">Privacy</a></footer>
+</div>
+</body>
+</html>
