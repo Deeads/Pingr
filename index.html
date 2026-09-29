@@ -388,12 +388,21 @@ document.querySelector("nav").addEventListener("click",e=>{
   document.getElementById("page-"+b.dataset.page).classList.add("on");
   window.scrollTo(0,0);
 });
-function signup(){
+// Email waitlist: stored in the Attis Labs D1 database via attislabs.com/api/waitlist.
+async function signup(){
   const email=document.getElementById("email").value.trim();
   const ok=document.getElementById("consent").checked;
   if(!email){showUpsell("Enter your email first.");return;}
   if(!ok){showUpsell("Check the box to continue.");return;}
-  showUpsell("You're on the list. We'll be in touch. ✅");
+  const src=(new URLSearchParams(location.search).get("src")||"pingr-site").slice(0,40);
+  try{
+    const r=await fetch("https://attislabs.com/api/waitlist",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({email,product:"pingr",source:src})});
+    const d=await r.json();
+    if(!d.ok){showUpsell(d.error||"Something went wrong. Try again?");return;}
+    document.getElementById("email").value="";
+    showUpsell(d.already?"You're already on the list. ✅":"You're on the list"+(d.position?" (#"+d.position+")":"")+". We'll be in touch. ✅");
+  }catch(e){showUpsell("Couldn't reach the server. Try again in a moment.");}
 }
 
 // ── live phone opt-in — calls the real Pingr backend so this page IS the
